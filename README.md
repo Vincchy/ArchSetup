@@ -1,2 +1,2 @@
 # ArchSetup
-Custom Arch Linux install, setup &amp config
+Custom Arch Linux install, setup & config
