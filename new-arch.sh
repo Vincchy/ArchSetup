@@ -146,15 +146,14 @@ mkdir $HOME/git
 mkdir $HOME/games
 
 #---dmenu & dmw
-git clone https://github.com/Vincchy/dmenu $HOME/.local/src
-git clone https://github.com/Vincchy/dwm $HOME/.local/src
+git clone https://github.com/Vincchy/dmenu $HOME/.local/src/dmenu
+git clone https://github.com/Vincchy/dwm $HOME/.local/src/dwm
 git clone https://github.com/Vincchy/util $HOME/.local/bin
-mv $HOME/.local/bin/util/* $HOME/.local/bin
-rmdir util
 
 chown $username $HOME/*
 
 #---yay installation
+# Something breaks here -----------------------------------------------------------------------
 sed -nE '/^#---Yay_Installation/, $p' $(basename "$0") >> /home/$username/$(basename "$0")
 chown $username:$username /home/$username/$(basename "$0")
 chmod +x /home/$username/$(basename "$0")
@@ -162,7 +161,7 @@ su -c /home/$username/$(basename "$0") $username
 exit
 
 #---Yay_Installation
-git clone https://aur.archlinux.org/yay.git $HOME/git
+git clone https://aur.archlinux.org/yay.git $HOME/git/yay
 cd $HOME/git/yay
 makepkg -si
 
