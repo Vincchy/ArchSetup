@@ -45,9 +45,9 @@ mount $main /mnt
 pacstrap /mnt base base-devel linux linux-firmware neovim
 genfstab -U /mnt >> /mnt/etc/fstab
 
-sed -nE '/^#---Setup/, $p' setup-arch.sh >> /mnt/setup-arch.sh
-chmod +x /mnt/setup-arch.sh
-arch-chroot /mnt ./setup-arch.sh
+sed -nE '/^#---Setup/, $p' $(basename "$0") >> /mnt/$(basename "$0")
+chmod +x /mnt/$(basename "$0")
+arch-chroot /mnt ./$(basename "$0")
 
 #---Setup
 pacman -S --noconfirm grub os-prober efibootmgr networkmanager
@@ -124,13 +124,6 @@ then
 	fi
 fi
 
-
-#sed -nE '/^#---Config/, $p' setup-arch.sh >> /home/$username/setup-arch.sh
-#chown $username:$username /home/$username/setup-arch.sh
-#chmod +x /home/$username/setup-arch.sh
-#su -c /home/$username/setup-arch.sh $username
-#exit
-
 #---Config
 HOME=/home/$username
 cd $HOME
@@ -159,7 +152,16 @@ git clone https://github.com/Vincchy/util $HOME/.local/bin
 mv $HOME/.local/bin/util/* $HOME/.local/bin
 rmdir util
 
+chown $username $HOME/*
+
 #---yay installation
+sed -nE '/^#---Yay_Installation/, $p' $(basename "$0") >> /home/$username/$(basename "$0")
+chown $username:$username /home/$username/$(basename "$0")
+chmod +x /home/$username/$(basename "$0")
+su -c /home/$username/$(basename "$0") $username
+exit
+
+#---Yay_Installation
 git clone https://aur.archlinux.org/yay.git $HOME/git
 cd $HOME/git/yay
 makepkg -si
@@ -197,8 +199,6 @@ do
 done
 END
 # ----------------------------- end of Xinit config
-
-chown $username $HOME/*
 
 #---End
 echo "Almost there..."
