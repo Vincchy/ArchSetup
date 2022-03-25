@@ -49,8 +49,6 @@ sed -nE '/^#---Setup/, $p' setup-arch.sh >> /mnt/setup-arch.sh
 chmod +x /mnt/setup-arch.sh
 arch-chroot /mnt ./setup-arch.sh
 
-exit
-
 #---Setup
 pacman -S --noconfirm grub os-prober efibootmgr networkmanager
 ln -sf /usr/share/zoneinfo/Europe/Warsaw
@@ -115,18 +113,17 @@ pacman -S --noconfirm ttf-font-awesome
 
 if [[ $ans = n ]];
 then
-
+	echo ""
+	echo ""
+	echo "------------------"
+	echo ""
+	read -p "Install additional applications? (e.g. web browser) [y/n] " answer
+	if [[ $answer = y ]];
+	then
+		pacman -S --noconfirm firefox tor tor-browser mupdf keepassxc
+	fi
 fi
 
-echo ""
-echo ""
-echo "------------------"
-echo ""
-read -p "Install additional applications? (e.g. web browser) [y/n] " ans
-if [[ $ans = y ]];
-then
-	pacman -S --noconfirm firefox tor tor-browser mupdf keepassxc
-fi
 
 #sed -nE '/^#---Config/, $p' setup-arch.sh >> /home/$username/setup-arch.sh
 #chown $username:$username /home/$username/setup-arch.sh
