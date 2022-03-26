@@ -107,7 +107,7 @@ read -p "Minimal installation? [y/n] " ans
 
 pacman -S --noconfirm python3 alacritty libnotify dunst picom sxhkd\
 	xorg xclip xorg-xsetroot xorg-xinit maim mpv python-pywal tee rofi\
-	pulseaudio
+	pulseaudio exa
 
 pacman -S --noconfirm ttf-font-awesome
 
@@ -154,10 +154,11 @@ chown $username $HOME/*
 
 #---yay installation
 # Something breaks here -----------------------------------------------------------------------
-sed -nE '/^#---Yay_Installation/, $p' $(basename "$0") >> /home/$username/$(basename "$0")
-chown $username:$username /home/$username/$(basename "$0")
-chmod +x /home/$username/$(basename "$0")
-su -c /home/$username/$(basename "$0") $username
+new_script=/home/$username/$(basename "$0")
+sed -nE '/^#---Yay_Installation/, $p' $(basename "$0") >> $new_script
+chown $username:$username $new_script
+chmod +x $new_script
+su -c $new_script $username
 exit
 
 #---Yay_Installation
