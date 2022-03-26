@@ -96,7 +96,7 @@ echo ""
 read -p "Install command line utilities? [y/n] " ans
 if [[ $ans = y ]];
 then
-	pacman -S --noconfirm neofetch htop git openssh sxiv
+	pacman -S --noconfirm neofetch htop git openssh sxiv > /dev/null
 fi
 
 echo ""
@@ -105,11 +105,13 @@ echo "------------------"
 echo ""
 read -p "Minimal installation? [y/n] " ans
 
+echo "Installing dependencies"
 pacman -S --noconfirm python3 alacritty libnotify dunst picom sxhkd\
 	xorg xclip xorg-xsetroot xorg-xinit maim mpv python-pywal tee rofi\
-	pulseaudio exa
+	pulseaudio exa > /dev/null
 
-pacman -S --noconfirm ttf-font-awesome
+echo "Installing fonts..."
+pacman -S --noconfirm ttf-font-awesome > /dev/null
 
 if [[ $ans = n ]];
 then
@@ -128,7 +130,6 @@ fi
 HOME=/home/$username
 cd $HOME
 mkdir $HOME/.config
-git clone https://github.com/Vincchy/dotfiles $HOME/.config
 
 mkdir -p $HOME/.local/src
 mkdir $HOME/.local/bin
@@ -145,10 +146,16 @@ mkdir $HOME/doc
 mkdir $HOME/git
 mkdir $HOME/games
 
-#---dmenu & dmw
-git clone https://github.com/Vincchy/dmenu $HOME/.local/src/dmenu
-git clone https://github.com/Vincchy/dwm $HOME/.local/src/dwm
-git clone https://github.com/Vincchy/util $HOME/.local/bin
+#---dmenu, dwm, utility scripts and dotfiles
+echo "Cloning dwm and dmenu..."
+git clone https://github.com/Vincchy/dmenu $HOME/.local/src/dmenu > /dev/null
+git clone https://github.com/Vincchy/dwm $HOME/.local/src/dwm > /dev/null
+echo "Getting useful scripts..."
+git clone https://github.com/Vincchy/util $HOME/.local/bin > /dev/null
+echo "Fetching config files..."
+git clone https://github.com/Vincchy/dotfiles $HOME/.config > /dev/null
+
+cat $HOME/.config/.bashrc > $HOME/.bashrc
 
 chown $username $HOME/*
 
@@ -162,12 +169,14 @@ su -c $new_script $username
 exit
 
 #---Yay_Installation
-git clone https://aur.archlinux.org/yay.git $HOME/git/yay
+echo "Installing yay package manager..."
+git clone https://aur.archlinux.org/yay.git $HOME/git/yay > /dev/null
 cd $HOME/git/yay
 makepkg -si
 
 #---yay apps installation
-yay -S adwaita-dark ytfzf shell-color-scripts python-pywalfox
+echo "Installing yay dependencies..."
+yay -S adwaita-dark ytfzf shell-color-scripts python-pywalfox > /dev/null
 
 # ----------------------------- Xinit config
 cat >$HOME/.xinitrc <<END
