@@ -48,6 +48,7 @@ genfstab -U /mnt >> /mnt/etc/fstab
 sed -nE '/^#---Setup/, $p' $(basename "$0") >> /mnt/$(basename "$0")
 chmod +x /mnt/$(basename "$0")
 arch-chroot /mnt ./$(basename "$0")
+exit
 
 #---Setup
 pacman -S --noconfirm grub os-prober efibootmgr networkmanager
